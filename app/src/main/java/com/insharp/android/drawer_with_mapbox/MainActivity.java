@@ -1,11 +1,12 @@
 package com.insharp.android.drawer_with_mapbox;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,39 +18,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+        NavController navController = Navigation.findNavController(this, R.id.fragment);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.firstFragment, R.id.secondFragment, R.id.thirdFragment).build();
+        NavigationUI.setupActionBarWithNavController(this,navController, appBarConfiguration);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new FirstFragment()).commit();
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            /* By using switch we can easily get the selected fragment by using there id. */
-            Fragment selectedFragment = null;
-
-            switch (item.getItemId()) {
-                case R.id.firstFragment:
-                    selectedFragment = new FirstFragment();
-                    break;
-                case R.id.secondFragment:
-                    selectedFragment = new SecondFragment();
-                    break;
-                case R.id.thirdFragment:
-                    selectedFragment = new ThirdFragment();
-                    break;
-                default:
-                    selectedFragment = null;
-                    break;
-            }
-
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, selectedFragment)
-                    .commit();
-            return true;
-        }
-    };
 }
